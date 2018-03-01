@@ -1,0 +1,113 @@
+<style>
+    .x-page-stage {position:absolute; top:0; left:653px; width:590px; height:342px; border:2px solid #ccc; border-top:0; background:#fff;}
+
+    .x-page-stage h2 {line-height:40px; font-size:20px; color:#999; text-align:center; font-weight:normal;}
+
+    .x-page-stage h3 {margin:10px 16px 0; line-height:30px; font-size:16px; font-weight:normal; color:#666;}
+
+    .x-page-stage .tl {width:100%; overflow:auto;}
+    .x-page-stage .tl li {float:left; width:20%; height:40px; line-height:40px; font-size:12px;}
+    .x-page-stage .tl li label {float:left; margin:8px; width:24px; height:24px; background:red; border-radius:5px;}
+
+    .x-page-stage .plan {width:100%; overflow:auto;}
+    .x-page-stage .plan li {float:left; width:25%; height:40px;}
+    .x-page-stage .plan li a {display:block; margin:8px 16px; height:24px; line-height:24px; text-align:center; text-decoration:none; font-size:14px; color:#333; border-radius:5px; background:#ccc;}
+    .x-page-stage .plan li a:hover {background:#666; color:#fff;}
+    .x-page-stage .plan li a.current {background:#666; color:#fff;}
+
+    .x-page-stage .plan li {width:100%; text-align:center;}
+    .x-page-stage .plan li a {margin:0 auto; width:200px; height:40px; line-height:40px;}
+</style>
+
+<script src="raphael.js"></script>
+<script src="jquery.min.js"></script>
+<script src="seat.js"></script>
+<script>
+
+var seatIssue = {};
+var render = null;
+var renderHtml = '';
+var sid = null;
+/*
+座数 7776;
+排数 428;
+区数 20;
+*/
+
+var seat_data = [
+    {area: 319, line: 18, seat: 1, color: "c00"},
+    {area: 319, line: 18, seat: 2, color: "c00"},
+    {area: 319, line: 18, seat: 3, color: "c00"},
+    {area: 319, line: 18, seat: 4, color: "c00"},
+    {area: 319, line: 18, seat: 5, color: "c00"},
+    {area: 319, line: 18, seat: 6, color: "c00"},
+    {area: 319, line: 18, seat: 7, color: "c00"},
+    {area: 319, line: 18, seat: 8, color: "c00"},
+    {area: 319, line: 18, seat: 9, color: "c00"},
+]
+
+$(document).ready(function() {
+
+    console.time("render");
+    render = $("#seat-map");
+    $("#header").hide();
+    $("#header-placeholder").hide();
+
+    areaF();
+    setTimeout(function(){
+        areaA(confA);
+        areaB(confB);
+        areaC(confC);
+        areaD(confD);
+        areaE(confE);
+        render.append(renderHtml);
+        console.timeEnd("render");
+        renderIssue(seat_data);
+    }, 0);
+});
+
+function renderIssue(data) {
+    $(".jq-seat-info").css("background", "#fff");
+    data = data.sort(function(a, b) {
+        var linea = parseInt(a.line);
+        if (parseInt(a.area)/100 > 3) {
+            linea += 100;
+        }
+        var lineb = parseInt(b.line);
+        if (parseInt(b.area)/100 > 3) {
+            lineb += 100;
+        }
+        if (linea < lineb) {
+            return -1;
+        }
+        return 1;
+    });
+    for (var i in data) {
+        var seat = data[i];
+        (function(seat){
+            setTimeout(function(){
+                $(".jq-area-"+seat.area+".jq-line-"+seat.line+".jq-seat-"+seat.seat).css("background", "#"+seat.color);
+            }, 0);
+        })(seat);
+    }
+}
+</script>
+
+<div style="width:1920px;height:1080px;" id="seat-map"></div>
+<!-- <a href="javascript:;" class="jq-create-issue" style="position:absolute;left:100px;top:700px;z-index:5;">生成方案</a> -->
+<div style="position:absolute;left:100px;top:800px;z-index:5;" class="jq-issue-list"></div>
+
+<div class="x-page-stage">
+    <ul class="tl">
+        <li><label style="background:#c00;"></label>1</li>
+        <li><label style="background:#ff6f33;"></label>2</li>
+        <li><label style="background:#999;"></label>3</li>
+        <li><label style="background:#85d435;"></label>4</li>
+        <li><label style="background:#35cec6;"></label>5</li>
+        <li><label style="background:#40a6ff;"></label>6</li>
+        <li><label style="background:#485ee5;"></label>7</li>
+        <li><label style="background:#b948e6;"></label>8</li>
+        <li><label style="background:#754c24;"></label>9</li>
+        <li><label style="background:#fd88fd;"></label>10</li>
+    </ul>
+</div>
